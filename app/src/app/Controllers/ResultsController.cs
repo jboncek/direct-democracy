@@ -2,7 +2,7 @@
 
 namespace App.Controllers
 {
-    public class ReportsController : Controller
+    public class ResultsController : Controller
     {
         public IActionResult Index()
         {

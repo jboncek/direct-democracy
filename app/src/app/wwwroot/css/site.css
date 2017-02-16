@@ -36,3 +36,18 @@ textarea {
     display: none
   }
 }
+
+.vote-results {
+    display: block;
+}
+
+.vote-no-btn {
+    background-color: lightcoral;
+}
+
+.vote-yes-btn {
+    background-color: lightgreen;
+}
+.vote-abstain-btn {
+    background-color: lightgray;
+}

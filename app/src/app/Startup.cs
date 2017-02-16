@@ -1,4 +1,6 @@
-﻿using App.Issue;
+﻿using app.Infrastructure;
+using App.Issue;
+using App.Report;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +30,8 @@ namespace app
             services.AddMvc();
 
             services.AddTransient<IssueProvider>();
+            services.AddTransient<ResultProvider>();
+            services.AddTransient<IssuesViewModelFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

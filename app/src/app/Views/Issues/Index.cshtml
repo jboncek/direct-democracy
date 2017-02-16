@@ -1,1 +1,65 @@
-﻿List of issues
+﻿@using Microsoft.DotNet.Cli.Utils
+@model app.ViewModels.IssuesViewModel
+
+<main id="current-issues">
+    <h1>Current Issues</h1>
+    @foreach (var issue in @Model.Issues)
+    {
+        <div class="panel panel-default" id="issues">
+            <div class="panel-heading" data-target="#@issue.IssueDetails.Id" role="button" data-parent="#issues" data-toggle="collapse" aria-expanded="true">
+                <span class="issue-shortname">@issue.IssueDetails.ShortName</span>
+                <span class="pull-right issue-scheduled-vote-date">@issue.IssueDetails.ScheduledVoteDate</span>
+            </div>
+            <div class="panel-body collapse" id="@issue.IssueDetails.Id" data-issue-code="@issue.IssueDetails.Code">
+                <span class="small issue-code">@issue.IssueDetails.Code</span>
+                <h3 class="issue-title">@issue.IssueDetails.Title</h3>
+                <span class="issue-summary">@issue.IssueDetails.Summary</span>
+                <span class="pull-right issue-document-link"><a href="@issue.IssueDetails.DocumentLink">Full Text</a></span>
+                <h3>Select your vote:</h3>
+                <div class="issue-vote btn-group-justified">
+                    <span class="col-xs-12 col-sm-4">
+                        <button class="btn btn-block btn-default vote-no-btn" value="no">No</button>
+                    </span>
+                    <span class="col-xs-12 col-sm-4">
+                        <button class="btn btn-block btn-default vote-abstain-btn" value="abstain">Abstain</button>
+                    </span>
+                    <span class="col-xs-12 col-sm-4">
+                        <button class="btn btn-block btn-default vote-yes-btn" value="yes">Yes</button>
+                    </span>
+                </div>
+                <div class="issue-votes">
+                    <h4>Current Results</h4>
+                    <!-- consider horizontal bar chart -->
+                    <span class="vote-results voted-yes">Voted Yes: <span class="vote-count">@issue.Results.VotedYes</span></span>
+                    <span class="vote-results voted-no">Voted No: <span class="vote-count">@issue.Results.VotedNo</span></span>
+                    <span class="vote-results voted-abstain">Voted Abstain: <span class="vote-count">@issue.Results.VotedAbstain</span></span>
+                </div>
+                <button class="btn btn-default pull-right" data-target="#@issue.IssueDetails.Id" role="button" data-parent="#issues" data-toggle="collapse" aria-expanded="true">close</button>
+            </div>
+        </div>
+    }
+    
+    @Html.Partial("_ConfirmVotePartial")
+</main>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        
+        $(".issue-vote button").on('click', function() {
+            var id = $(this).closest(".panel-body").attr("id");
+            var code = $(this).closest(".panel-body").data("issueCode");
+            var vote = $(this).val();
+
+            $("#confirm-modal").data("issueId", id);
+            $("#confirm-modal").data("issueCode", code);
+            $("#confirm-modal").data("issueVote", vote);
+
+            $("#confirm-modal .modal-body").html("You selected <b>" + vote + "</b> for issue " + code);
+
+            $("#confirm-modal").modal("show");
+        })
+
+    </script>
+
+}

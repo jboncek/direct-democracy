@@ -1,4 +1,6 @@
-﻿using App.Issue;
+﻿using app.Infrastructure;
+using App.Issue;
+using App.Report;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Controllers
@@ -7,16 +9,29 @@ namespace App.Controllers
     {
         private readonly IssueProvider _issueProvider;
 
-        public IssuesController(IssueProvider issueProvider)
+        private readonly ResultProvider _resultsProvider;
+
+        private readonly IssuesViewModelFactory _factory;
+
+        public IssuesController(
+            IssueProvider issueProvider, 
+            ResultProvider resultsProvider, 
+            IssuesViewModelFactory factory)
         {
             _issueProvider = issueProvider;
+            _resultsProvider = resultsProvider;
+            _factory = factory;
         }
 
         public IActionResult Index()
         {
             var issues = _issueProvider.GetUpcoming();
 
-            return View();
+            var results = _resultsProvider.GetIssueResults(issues);
+
+            var model = _factory.Get(issues, results);
+
+            return View(model);
         }
     }
 }
